@@ -1,0 +1,7 @@
+gcc -o benchmark.o benchmark.c dlmall.c; for i in {1..600} 
+do
+        ./benchmark.o $i
+done > gnuplot/fragment_with_merge.dat; gcc -o benchmark.o benchmark.c dlmall_without_merge.c; for i in {1..600}
+do
+        ./benchmark.o $i
+done > gnuplot/fragment_without_merge.dat;cd gnuplot; gnuplot fragmentation.p; cd ..

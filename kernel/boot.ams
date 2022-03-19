@@ -1,0 +1,30 @@
+bits 16
+
+start:
+    mov ax, 0x07C0      ; we are at 0x07c00
+    add ax, 0x20        ; add 0x20
+    mov ss, ax          ; set stack segment
+    mov sp, 0x1000      ; set stack pointer
+
+    mov ax, 0x07C0      ; set data segment
+    mov ds, ax
+
+    mov si, msg         ; set source index to message
+    mov ah, 0x0E        ; print chr BIOS procedure
+
+.next:
+    lodsb               ; load byte to al and increment SI
+    cmp al, 0          ; if byte == 0
+    je .done            ;   jump to done¨
+    int 0x10            ; invoke BIOS sys call
+    jmp .next           ; loop
+
+.done:
+    jmp $               ; endloop
+
+
+msg: 
+    db 'Hello', 0       ; string input
+
+times 510-($-$$) db 0   ; fill 510 bytes
+dw 0xAA55               ; final 2 bytes is MBR signature
